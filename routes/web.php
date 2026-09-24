@@ -19,6 +19,12 @@ Route::get('/', 'App\Http\Controllers\AuthController@login')->name('login');
 Route::get('/login', 'App\Http\Controllers\AuthController@login')->name('login');
 Route::post('/loginProses', 'App\Http\Controllers\AuthController@loginProses');
 
+//LOGOUT
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('login');
+})->name('logout');
+
 
 //BACKEND
 Route::group(['middleware' => 'auth'], function () {
