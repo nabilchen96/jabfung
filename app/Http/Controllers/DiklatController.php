@@ -93,7 +93,7 @@ class DiklatController extends Controller
             'penyelenggara' => 'required',
             'tahun' => 'required',
             
-            'file_sertifikat' => 'required|mimes:pdf|max:1048',
+            'file_sertifikat' => 'mimes:pdf|max:1048',
 
         ]);
 

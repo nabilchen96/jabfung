@@ -54,6 +54,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/update-kepangkatan', 'App\Http\Controllers\KepangkatanController@update');
     Route::post('/delete-kepangkatan', 'App\Http\Controllers\KepangkatanController@delete');
 
+    //ANGKA KREDIT
+    Route::get('/angka-kredit', 'App\Http\Controllers\AngkaKreditController@index');
+    Route::get('/data-angka-kredit', 'App\Http\Controllers\AngkaKreditController@data');
+    Route::post('/store-angka-kredit', 'App\Http\Controllers\AngkaKreditController@store');
+    Route::post('/update-angka-kredit', 'App\Http\Controllers\AngkaKreditController@update');
+    Route::post('/delete-angka-kredit', 'App\Http\Controllers\AngkaKreditController@delete');
+
 
     //PENDIDIKAN
     Route::get('/pendidikan', 'App\Http\Controllers\PendidikanController@index');
