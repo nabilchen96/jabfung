@@ -197,3 +197,10 @@
     .app-shell .navbar .navbar-brand-wrapper .navbar-brand.brand-logo { display: flex; }
     .app-shell .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini { display: none; }
 }
+
+/* Keep desktop navigation in the viewport, independent of the theme's scroll containers. */
+@media (min-width: 992px) {
+    .app-shell .sidebar { position: fixed; left: 0; bottom: 0; z-index: 1020; }
+    .app-shell .main-panel { margin-left: 260px; }
+    .app-shell.sidebar-icon-only .main-panel { margin-left: 80px; }
+}
