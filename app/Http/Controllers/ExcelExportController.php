@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class ExcelExportController extends Controller
 {
     private const EXPORTS = [
+        'evaluasi-kinerja' => ['evaluasi_kinerjas', ['nilai' => 'Nilai', 'keterangan' => 'Keterangan']],
         'absensi' => ['absensis', [
             'bulan' => 'Bulan', 'total_terlambat' => 'Total Terlambat (HH:MM:SS)',
             'total_izin' => 'Total Izin (Hari)', 'total_cuti' => 'Total Cuti (Hari)', 'total_dinas' => 'Total Dinas (Hari)',

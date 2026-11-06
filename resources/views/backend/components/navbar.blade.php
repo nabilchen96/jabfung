@@ -85,5 +85,11 @@
                 <span class="menu-title">Absensi</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('evaluasi-kinerja.index') }}">
+                <i class="bi bi-clipboard-check menu-icon" aria-hidden="true"></i>
+                <span class="menu-title">Evaluasi Kinerja</span>
+            </a>
+        </li>
     </ul>
 </nav>
