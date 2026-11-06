@@ -3,7 +3,7 @@
     var data = window.dashboardCharts;
     if (!data || typeof Chart === 'undefined') return;
 
-    var colors = ['#4b49ac', '#248afd', '#57b657', '#ffc100', '#f3797e', '#6c5ce7', '#17a2b8', '#855f42'];
+    var colors = ['#087f72', '#6b88bd', '#a9c9a5', '#d7ae67', '#94b7c3', '#a595bb', '#c9a694', '#647b90'];
     function render(id, type, labels, values, label, color) {
         var canvas = document.getElementById(id);
         if (!canvas) return;
@@ -26,7 +26,7 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                legend: { display: round, position: 'bottom' },
+                legend: { display: round, position: 'bottom', labels: { boxWidth: 10, padding: 16, fontSize: 11, fontColor: '#718096' } },
                 scales: round ? {} : {
                     yAxes: [{ ticks: { beginAtZero: true, precision: id === 'trainingChart' ? 0 : 2 } }],
                     xAxes: [{ gridLines: { display: false } }]
@@ -36,6 +36,6 @@
         });
     }
     render('educationChart', 'doughnut', data.education.labels, data.education.values, 'Riwayat pendidikan');
-    render('trainingChart', 'bar', data.years, data.training, 'Jumlah diklat', '#248afd');
-    render('creditChart', 'line', data.years, data.credits, 'Total angka kredit', '#4b49ac');
+    render('trainingChart', 'bar', data.years, data.training, 'Jumlah diklat', '#6b88bd');
+    render('creditChart', 'line', data.years, data.credits, 'Total angka kredit', '#087f72');
 })();

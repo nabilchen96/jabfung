@@ -11,8 +11,8 @@
 @endpush
 
 @section('content')
-    <div class="row" style="margin-top: -200px;">
-        <div class="col-12 text-white">
+    <div class="row page-heading">
+        <div class="col-12 page-heading-content">
             <h3 class="font-weight-bold">Evaluasi Kinerja</h3>
             <p>Penilaian kinerja {{ $admin ? 'pegawai' : 'Anda' }}.</p>
         </div>

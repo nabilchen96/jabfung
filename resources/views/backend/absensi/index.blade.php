@@ -10,8 +10,8 @@
 @endpush
 
 @section('content')
-    <div class="row" style="margin-top: -200px;">
-        <div class="col-12 text-white">
+    <div class="row page-heading">
+        <div class="col-12 page-heading-content">
             <h3 class="font-weight-bold">Data Absensi</h3>
             <p>Rekap bulanan {{ $admin ? 'pegawai' : 'Anda' }}. Izin, cuti, dinas, dan kehadiran dalam hari; terlambat dan pulang cepat dalam durasi.</p>
         </div>

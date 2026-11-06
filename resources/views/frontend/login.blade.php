@@ -1,112 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
-    <link rel="stylesheet" href="{{ asset('skydash/vendors/feather/feather.css') }}">
-    <link rel="stylesheet" href="{{ asset('skydash/vendors/ti-icons/css/themify-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('skydash/vendors/css/vendor.bundle.base.css') }}">
-    <link rel="stylesheet" href="{{ asset('skydash/css/vertical-layout-light/style.css') }}">
-    <link rel="shortcut icon" href="{{ asset('skydash/images/favicon.png') }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Masuk · JABFUNG</title>
+    <link rel="stylesheet" href="{{ asset('css/backend/login.css') }}?v={{ filemtime(public_path('css/backend/login.css')) }}">
 </head>
-
 <body>
-    <div class="container-scroller">
-        <div class="container-fluid page-body-wrapper full-page-wrapper">
-            <div class="content-wrapper d-flex align-items-center auth px-0">
-                <div class="row w-100 mx-0">
-                    <div class="col-lg-4 mx-auto">
-                        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
-                            <div class="brand-logo">
-                                {{-- <img src="" alt="logo"> --}}
-                            </div>
-                            <h4>Hello! let's get started</h4>
-                            <h6 class="font-weight-light">Sign in to continue.</h6>
-                            <form class="pt-3" id="formLogin">
-                                <div class="form-group">
-                                    <input type="email" class="form-control form-control-lg" name="email"
-                                        id="email" placeholder="Username">
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control form-control-lg" id="password"
-                                        name="password" placeholder="Password">
-                                </div>
-                                <div class="mt-3">
-                                    <button type="submit" id="btnLogin"
-                                        class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">
-                                        Login
-                                    </button>
-                                    <button type="button" id="btnLoginLoading" style="display: none;" disabled
-                                        class="w-full py-2 bg-red-400 text-white rounded-md flex items-center justify-center">
-                                        <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                stroke="currentColor" stroke-width="4" />
-                                            <path class="opacity-75" fill="currentColor"
-                                                d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z" />
-                                        </svg>
-                                        Loading...
-                                    </button>
-                                </div>
-                                <div class="my-2 d-flex justify-content-between align-items-center">
-                                    <div class="form-check">
-                                        <label class="form-check-label text-muted">
-                                            <input type="checkbox" class="form-check-input">
-                                            Keep me signed in
-                                        </label>
-                                    </div>
-                                    <a href="#" class="auth-link text-black">Forgot password?</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+    <main class="login-layout">
+        <section class="login-story" aria-label="JABFUNG Manajemen Kepegawaian">
+            <a href="{{ url('/') }}" class="login-brand"><span class="login-mark">J<span>.</span></span><span>JABFUNG<small>MANAJEMEN KEPEGAWAIAN</small></span></a>
+            <div class="login-story-content">
+                <span class="login-eyebrow">RUANG KERJA TERPADU</span>
+                <h1>Data lebih teratur.<br>Kerja lebih <em>terarah.</em></h1>
+                <p>Kelola profil, kualifikasi, absensi, dan evaluasi kinerja dalam satu ruang yang terhubung.</p>
+                <div class="login-preview" aria-hidden="true">
+                    <div class="preview-header"><span class="preview-dot"></span> Ringkasan kepegawaian <span class="preview-more">···</span></div>
+                    <div class="preview-content"><div class="preview-chart"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="preview-lines"><span></span><span></span><span></span><span></span></div></div>
+                    <div class="preview-footer"><span>Profil &amp; kualifikasi</span><span>Absensi &amp; kinerja</span></div>
                 </div>
             </div>
-            <!-- content-wrapper ends -->
-        </div>
-        <!-- page-body-wrapper ends -->
-    </div>
-
+            <div class="login-story-footer"><x-ui-icon name="shield" /> Pengelolaan data sesuai hak akses.</div>
+        </section>
+        <section class="login-form-panel" aria-labelledby="login-title">
+            <div class="login-form-wrap">
+                <span class="login-welcome-icon"><x-ui-icon name="briefcase" /></span>
+                <span class="login-form-eyebrow">SELAMAT DATANG KEMBALI</span>
+                <h2 id="login-title">Masuk ke ruang kerja</h2>
+                <p class="login-subtitle">Gunakan akun Anda untuk melanjutkan.</p>
+                <div id="loginFeedback" class="login-feedback" role="alert" hidden></div>
+                <form id="formLogin" method="POST" action="{{ url('loginProses') }}">
+                    @csrf
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="nama@instansi.go.id" autocomplete="username" required>
+                    <label for="password">Kata sandi</label>
+                    <input type="password" name="password" id="password" placeholder="Masukkan kata sandi" autocomplete="current-password" required>
+                    <button type="submit" id="btnLogin">Masuk <span aria-hidden="true">&rarr;</span></button>
+                    <button type="button" id="btnLoginLoading" class="login-loading" style="display:none;" disabled><span class="login-spinner" aria-hidden="true"></span> Memproses...</button>
+                </form>
+                <div class="login-help">Belum memiliki akun atau lupa kata sandi?<br><strong>Hubungi administrator instansi Anda.</strong></div>
+                <p class="login-form-footer">JABFUNG &middot; Manajemen Kepegawaian Terpadu</p>
+            </div>
+        </section>
+    </main>
     <script src="{{ asset('skydash/js/axios/dist/axios.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
     <script>
-        const formLogin = document.getElementById("formLogin");
-
-        formLogin.onsubmit = (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(formLogin);
-            document.getElementById("btnLogin").style.display = "none";
-            document.getElementById("btnLoginLoading").style.display = "flex";
-
-            axios.post('/loginProses', formData)
-                .then(res => {
-                    if (res.data.responCode == 1) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Login Berhasil',
-                            text: 'Mengalihkan ke dashboard...',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                        setTimeout(() => location.reload(), 1500);
+        const formLogin = document.getElementById('formLogin');
+        formLogin.onsubmit = function (event) {
+            event.preventDefault();
+            const button = document.getElementById('btnLogin');
+            const loading = document.getElementById('btnLoginLoading');
+            const feedback = document.getElementById('loginFeedback');
+            feedback.hidden = true;
+            button.disabled = true;
+            button.style.display = 'none';
+            loading.style.display = 'flex';
+            axios.post(formLogin.action, new FormData(formLogin), { headers: { 'Accept': 'application/json' } })
+                .then(function (response) {
+                    if (response.data.responCode === 1) {
+                        window.location.assign({{ \Illuminate\Support\Js::from(url('dashboard')) }});
                     } else {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Login Gagal',
-                            text: res.data.respon
-                        });
+                        feedback.textContent = response.data.respon || 'Email atau kata sandi tidak sesuai.';
+                        feedback.hidden = false;
                     }
                 })
-                .catch(err => console.error(err))
-                .finally(() => {
-                    document.getElementById("btnLogin").style.display = "block";
-                    document.getElementById("btnLoginLoading").style.display = "none";
+                .catch(function (error) {
+                    feedback.textContent = error.response && error.response.status === 419
+                        ? 'Sesi telah berakhir. Muat ulang halaman lalu coba lagi.'
+                        : 'Tidak dapat masuk. Periksa koneksi dan akun Anda, lalu coba lagi.';
+                    feedback.hidden = false;
+                })
+                .finally(function () {
+                    button.disabled = false;
+                    button.style.display = 'flex';
+                    loading.style.display = 'none';
                 });
-        }
+        };
     </script>
 </body>
-
 </html>

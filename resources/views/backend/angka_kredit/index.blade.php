@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="row" style="margin-top: -200px;">
+<div class="row page-heading">
 
-    <div class="col-md-12 text-white">
+    <div class="col-md-12 page-heading-content">
 
         <div class="row">
 
