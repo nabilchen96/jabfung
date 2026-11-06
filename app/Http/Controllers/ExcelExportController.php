@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 class ExcelExportController extends Controller
 {
     private const EXPORTS = [
+        'absensi' => ['absensis', [
+            'bulan' => 'Bulan', 'total_terlambat' => 'Total Terlambat (Hari)',
+            'total_cuti_izin_dinas' => 'Total Cuti/Izin/Dinas (Hari)',
+            'total_pulang_cepat' => 'Total Pulang Cepat (Hari)', 'total_kehadiran' => 'Total Kehadiran (Hari)',
+        ]],
         'user' => ['users', ['name' => 'Nama', 'email' => 'Email', 'role' => 'Peran']],
         'detail-user' => ['detail_users', [
             'nip' => 'NIP', 'nama' => 'Nama Lengkap', 'jenis_kelamin' => 'Jenis Kelamin',
@@ -79,6 +84,10 @@ class ExcelExportController extends Controller
             if (!$admin) {
                 $query->where("$table.user_id", $userId);
             }
+        }
+        if ($page === 'absensi') {
+            $validated = $request->validate(['bulan' => 'required|date_format:Y-m']);
+            $query->where('absensis.bulan', $validated['bulan']);
         }
         if ($page === 'detail-user') {
             $validated = $request->validate(['id' => 'required|integer|exists:users,id']);
