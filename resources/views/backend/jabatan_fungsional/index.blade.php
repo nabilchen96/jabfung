@@ -5,9 +5,6 @@
             <div class="row">
                 <div class="col-12 col-xl-8 mb-xl-0">
                     <h3 class="font-weight-bold">Data Jabatan Fungsional</h3>
-                    <a href="{{ route('export.excel', ['page' => 'jabatan-fungsional']) }}" class="btn btn-success btn-sm mt-2" title="Ekspor seluruh data yang dapat Anda akses">
-                        <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Export Excel
-                    </a>
                 </div>
             </div>
         </div>
@@ -16,11 +13,15 @@
         <div class="col-12 mt-4">
             <div class="card w-100">
                 <div class="card-body">
-                    <button type="button"
-                        class="btn btn-primary btn-md mb-4 d-none d-md-inline-block" data-toggle="modal"
-                        data-target="#modal">
-                        Tambah
-                    </button>
+                    <div class="d-flex flex-wrap align-items-center mb-4">
+                        <button type="button" class="btn btn-primary btn-md mr-2 d-none d-md-inline-block"
+                            data-toggle="modal" data-target="#modal">
+                            Tambah
+                        </button>
+                        <a href="{{ route('export.excel', ['page' => 'jabatan-fungsional']) }}" class="btn btn-success btn-md" title="Ekspor seluruh data yang dapat Anda akses">
+                            <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Export Excel
+                        </a>
+                    </div>
 
 
                     <div class="table-responsive">
