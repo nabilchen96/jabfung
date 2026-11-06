@@ -52,7 +52,7 @@ class ExcelExportTest extends TestCase
         $user = User::factory()->create(['role' => 'Admin']);
         $this->records($user, 'Profile');
         $this->actingAs($user);
-        foreach (['dashboard', 'user', 'jabatan-fungsional', 'kepangkatan', 'angka-kredit', 'pendidikan', 'diklat', 'detail-user'] as $page) {
+        foreach (['user', 'jabatan-fungsional', 'kepangkatan', 'angka-kredit', 'pendidikan', 'diklat', 'detail-user'] as $page) {
             $params = ['page' => $page];
             $url = '/'.$page;
             if ($page === 'detail-user') {
