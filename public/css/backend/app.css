@@ -211,3 +211,15 @@ table.dataTable thead .sorting_desc::before {
     }
 
 }
+
+/* Keep page actions aligned even when the theme changes link/button padding. */
+.btn.page-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    min-width: 100px;
+    padding: 0 1.5rem;
+    line-height: 1;
+    white-space: nowrap;
+}

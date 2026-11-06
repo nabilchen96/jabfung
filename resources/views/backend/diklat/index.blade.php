@@ -14,12 +14,12 @@
             <div class="card w-100">
                 <div class="card-body">
                     <div class="d-flex flex-wrap align-items-center mb-4">
-                        <button type="button" class="btn btn-primary btn-md mr-2 d-none d-md-inline-block"
+                        <button type="button" class="btn btn-primary btn-md page-action mr-2 d-none d-md-inline-flex"
                             data-toggle="modal" data-target="#modal">
                             Tambah
                         </button>
-                        <a href="{{ route('export.excel', ['page' => 'diklat']) }}" class="btn btn-success btn-md" title="Ekspor seluruh data yang dapat Anda akses">
-                            <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Export Excel
+                        <a href="{{ route('export.excel', ['page' => 'diklat']) }}" class="btn btn-success btn-md page-action" title="Ekspor seluruh data yang dapat Anda akses">
+                            Export
                         </a>
                     </div>
 

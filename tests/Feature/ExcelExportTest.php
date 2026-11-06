@@ -59,7 +59,7 @@ class ExcelExportTest extends TestCase
                 $params['id'] = $user->id;
                 $url .= '?id='.$user->id;
             }
-            $this->get($url)->assertOk()->assertSee(route('export.excel', $params), false)->assertSee('Export Excel');
+            $this->get($url)->assertOk()->assertSee(route('export.excel', $params), false)->assertSeeText('Export');
         }
     }
 
