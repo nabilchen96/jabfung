@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <!-- Required meta tags -->
@@ -19,15 +19,9 @@
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css" />
     <link href="{{ url('ilanding/assets/img/pandu3.png') }}" rel="icon">
     <link href="{{ url('ilanding/assets/img/pandu3.png') }}" rel="apple-touch-icon">
-    <link rel="stylesheet" href="{{ asset('css/backend/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/backend/app.css') }}?v={{ filemtime(public_path('css/backend/app.css')) }}">
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     @stack('style')
-    <style>
-        table th,
-        td {
-            font-size: 13px !important;
-        }
-    </style>
     <script language="javascript">
         function getkey(e) {
             if (window.event)
@@ -69,59 +63,36 @@
     </script>
 </head>
 
-<body>
+<body class="app-shell">
     <div class="container-scroller">
-        <!-- partial:partials/_navbar.html -->
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
-                style="box-shadow: 0px 5px 21px -5px #CDD1E1;">
-                <a class="navbar-brand brand-logo mr-5" style="font-size: 16px; margin-left: 20px;"
-                    href="{{ url('/') }}">
-                    {{-- <h3><b> <img style="height: 65px;" src="" alt=""> </b></h3> --}}
-                    <h3>JABFUNG</h3>
+        <a class="skip-link" href="#main-content">Langsung ke konten</a>
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row" aria-label="Bilah aplikasi">
+            <div class="navbar-brand-wrapper d-flex align-items-center">
+                <a class="navbar-brand brand-logo" href="{{ url('dashboard') }}" aria-label="JABFUNG Dashboard">
+                    <span class="brand-mark">J<span>.</span></span><span class="brand-name">JABFUNG<span>Manajemen Kepegawaian</span></span>
                 </a>
-                <a class="navbar-brand brand-logo-mini" href="{{ url('/') }}">
-                    <h3>JF</h3>
-                    {{-- <img src="" alt=""> --}}
-                </a>
+                <a class="navbar-brand brand-logo-mini" href="{{ url('dashboard') }}" aria-label="Dashboard"><span class="brand-mark">J<span>.</span></span></a>
             </div>
-            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-                <button style="padding-left: 0;" class="navbar-toggler navbar-toggler align-self-center" type="button"
-                    data-toggle="minimize">
-                    <span class="icon-menu"></span>
-                </button>
-
-                <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item nav-profile dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                            {{-- <img src="{{ asset('mountain.png') }}" style="object-fit: cover;" alt="profile" /> --}}
-                            <i class="bi bi-person-circle" style="font-size: 30px;"></i>
+            <div class="navbar-menu-wrapper d-flex align-items-center">
+                <button class="navbar-toggler d-none d-lg-inline-flex" type="button" data-toggle="minimize" aria-label="Perkecil atau perluas sidebar"><x-ui-icon name="menu" /></button>
+                <button class="navbar-toggler d-lg-none" type="button" data-toggle="offcanvas" aria-controls="sidebar" aria-expanded="false" aria-label="Buka menu navigasi"><x-ui-icon name="menu" /></button>
+                <div class="topbar-context"><span>RUANG KERJA</span><strong>Pengelolaan Kepegawaian</strong></div>
+                <div class="topbar-right">
+                    <span class="topbar-date">{{ now()->locale('id')->translatedFormat('d F Y') }}</span>
+                    <div class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle topbar-profile" href="#" data-toggle="dropdown" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="user-avatar">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
+                            <span class="topbar-user"><strong>{{ Auth::user()->name }}</strong><small>{{ Auth::user()->role }}</small></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
-                            aria-labelledby="profileDropdown">
-                            <a class="dropdown-item" style="padding-top: 0; padding-bottom: 0;">
-                                <i class="bi bi-envelope"></i>
-
-                            </a>
-                            <a class="dropdown-item" style="padding-top: 0; padding-bottom: 0;">
-                                <i class="bi bi-person-circle"></i>
-
-                            </a>
-                            <a class="dropdown-item" href="{{ url('logout') }}">
-                                <i class="ti-power-off text-primary"></i>
-                                Logout
-                            </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                            <div class="dropdown-user-info"><strong>{{ Auth::user()->name }}</strong><span>{{ Auth::user()->email }}</span></div>
+                            <a class="dropdown-item" href="{{ url('logout') }}"><x-ui-icon name="logout" /> Keluar</a>
                         </div>
-                    </li>
-
-                </ul>
-                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-                    data-toggle="offcanvas">
-                    <span class="icon-menu"></span>
-                </button>
+                    </div>
+                </div>
             </div>
         </nav>
-        <!-- partial -->
+        <button class="sidebar-backdrop" type="button" aria-label="Tutup menu navigasi" hidden></button>
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_settings-panel.html -->
             <div class="theme-setting-wrapper">
@@ -135,20 +106,10 @@
             <!-- partial -->
             <div class="main-panel">
 
-                <div
-                    style="
-                    background: #4b49ac;
-                    /* background-image:  
-                    url('https://cdn.pixabay.com/photo/2024/12/31/14/11/cybersecurity-9302462_1280.png');  */
-                    height: 200px; 
-                    background-position: center 40%;
-                    background-size: cover;
-                    width: 100%;">
-
-                </div>
-                <div class="content-wrapper">
+                <main class="content-wrapper" id="main-content" tabindex="-1">
                     @yield('content')
-                </div>
+                </main>
+                <footer class="app-footer"><span>JABFUNG <span class="footer-dot">&middot;</span> Manajemen Kepegawaian</span><span>Ruang kerja yang lebih teratur.</span></footer>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
 
@@ -173,6 +134,7 @@
     <script src="{{ asset('skydash/js/axios/dist/axios.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script src="{{ asset('js/backend/app.js') }}?v={{ filemtime(public_path('js/backend/app.js')) }}"></script>
     @stack('script')
     <script>
         $('#btnSync').click(function() {

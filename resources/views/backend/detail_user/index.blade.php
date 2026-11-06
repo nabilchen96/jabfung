@@ -5,8 +5,8 @@
     <form action="{{ url('store-detail-user') }}?id=" method="POST" enctype="multipart/form-data">
         @csrf
 
-        <div class="row" style="margin-top: -200px;">
-            <div class="col-md-12 text-white">
+        <div class="row page-heading">
+            <div class="col-md-12 page-heading-content">
                 <h3 class="font-weight-bold">Data Detail User</h3>
                     <a href="{{ route('export.excel', ['page' => 'detail-user', 'id' => request('id')]) }}" class="btn btn-success btn-md page-action mt-2" title="Ekspor seluruh data yang dapat Anda akses">
                         Export

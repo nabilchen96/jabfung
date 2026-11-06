@@ -1,15 +1,16 @@
 @extends('backend.app')
 
 @push('style')
-    <link rel="stylesheet" href="{{ asset('css/backend/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/backend/dashboard.css') }}?v={{ filemtime(public_path('css/backend/dashboard.css')) }}">
 @endpush
 
 @section('content')
     <div class="dashboard">
         <div class="row dashboard-heading">
-            <div class="col-12 text-white">
+            <div class="col-12 page-heading-content">
+                <span class="page-eyebrow">RINGKASAN KEPEGAWAIAN</span>
                 <h3 class="font-weight-bold mb-2">Dashboard</h3>
-                <p class="mb-0">Ringkasan {{ $admin ? 'seluruh data kepegawaian' : 'data kepegawaian Anda' }}.</p>
+                <p class="mb-0">Selamat datang, {{ Auth::user()->name }}. Ringkasan {{ $admin ? 'seluruh data kepegawaian' : 'data kepegawaian Anda' }}.</p>
             </div>
         </div>
 
@@ -18,6 +19,7 @@
                 <div class="col-6 col-md-4 col-xl-2 mb-4">
                     <a href="{{ $card['url'] }}" class="card dashboard-card dashboard-stat h-100">
                         <div class="card-body">
+                            <span class="stat-icon"><x-ui-icon :name="['users', 'briefcase', 'award', 'book', 'clipboard', 'chart'][$loop->index]" /></span>
                             <p class="dashboard-stat-label">{{ $card['label'] }}</p>
                             <div class="dashboard-stat-value">{{ number_format($card['count'], 0, ',', '.') }}</div>
                             <span class="dashboard-stat-link">Lihat data &rarr;</span>
@@ -97,5 +99,5 @@
 
 @push('script')
     <script>window.dashboardCharts = {{ Illuminate\Support\Js::from($charts) }};</script>
-    <script src="{{ asset('js/backend/dashboard/index.js') }}"></script>
+    <script src="{{ asset('js/backend/dashboard/index.js') }}?v={{ filemtime(public_path('js/backend/dashboard/index.js')) }}"></script>
 @endpush
