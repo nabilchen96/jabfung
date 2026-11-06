@@ -1,0 +1,28 @@
+.dashboard-heading { margin-top: -200px; }
+.dashboard .dashboard-card { border: 1px solid #e9ebf2; border-radius: 16px; background: #fff; box-shadow: 0 4px 18px rgba(29, 38, 72, .04); }
+.dashboard .dashboard-card .card-body { padding: 1.5rem; }
+.dashboard-stat { color: #343a40; text-decoration: none; transition: transform .15s ease; }
+.dashboard-stat:hover { color: #343a40; text-decoration: none; transform: translateY(-3px); }
+.dashboard-stat:focus-visible { outline: 3px solid #248afd; outline-offset: 3px; }
+.dashboard-stat-label { min-height: 40px; margin-bottom: 12px; font-size: .85rem; color: #606879; }
+.dashboard-stat-value { font-size: 2rem; font-weight: 700; line-height: 1.2; color: #4b49ac; overflow-wrap: anywhere; }
+.dashboard-stat-link { display: block; margin-top: 14px; font-size: .8rem; color: #4b49ac; }
+.dashboard-chart-title { font-weight: 700; margin-bottom: 10px; }
+.dashboard-chart { position: relative; height: 280px; }
+.dashboard-chart-note { margin: 16px 0 0; color: #667085; font-size: .8rem; line-height: 1.5; }
+.dashboard-empty { min-height: 280px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; border-radius: 12px; background: #f5f6fc; color: #667085; }
+.dashboard-chart-summary { list-style: none; padding: 0; margin: 20px 0 0; }
+.dashboard-chart-summary li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid #f0f1f5; }
+.dashboard-credit-total { padding: 12px 18px; background: #f0effa; border-radius: 12px; color: #4b49ac; }
+.dashboard-credit-total span { display: block; font-size: .8rem; }
+.dashboard-credit-total strong { display: block; margin-top: 4px; font-size: 1.5rem; }
+@media (max-width: 768px) {
+    .dashboard .dashboard-card, .dashboard .dashboard-card .card-body { background: #fff !important; }
+    .dashboard .dashboard-card { border: 1px solid #e9ebf2 !important; }
+    .dashboard .dashboard-card .card-body { padding: 1rem !important; }
+    .dashboard .dashboard-year-table thead { display: table-header-group; }
+    .dashboard .dashboard-year-table tbody tr { display: table-row !important; }
+    .dashboard .dashboard-year-table td, .dashboard .dashboard-year-table th { display: table-cell !important; white-space: nowrap; padding: 10px !important; }
+    .dashboard .dashboard-year-table td::before { content: none; }
+    .dashboard-chart { height: 240px; }
+}

@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\DB;
 class ExcelExportController extends Controller
 {
     private const EXPORTS = [
+        'evaluasi-kinerja' => ['evaluasi_kinerjas', ['nilai' => 'Nilai', 'keterangan' => 'Keterangan']],
+        'absensi' => ['absensis', [
+            'bulan' => 'Bulan', 'total_terlambat' => 'Total Terlambat (HH:MM:SS)',
+            'total_izin' => 'Total Izin (Hari)', 'total_cuti' => 'Total Cuti (Hari)', 'total_dinas' => 'Total Dinas (Hari)',
+            'total_pulang_cepat' => 'Total Pulang Cepat (HH:MM:SS)', 'total_kehadiran' => 'Total Kehadiran (Hari)',
+            'perlu_penyesuaian' => 'Status Data',
+        ]],
         'user' => ['users', ['name' => 'Nama', 'email' => 'Email', 'role' => 'Peran']],
         'detail-user' => ['detail_users', [
             'nip' => 'NIP', 'nama' => 'Nama Lengkap', 'jenis_kelamin' => 'Jenis Kelamin',
@@ -80,6 +87,10 @@ class ExcelExportController extends Controller
                 $query->where("$table.user_id", $userId);
             }
         }
+        if ($page === 'absensi') {
+            $validated = $request->validate(['bulan' => 'required|date_format:Y-m']);
+            $query->where('absensis.bulan', $validated['bulan']);
+        }
         if ($page === 'detail-user') {
             $validated = $request->validate(['id' => 'required|integer|exists:users,id']);
             abort_unless($admin || (int) $validated['id'] === $userId, 403);
@@ -89,7 +100,18 @@ class ExcelExportController extends Controller
         if ($table !== 'users') {
             array_unshift($headings, 'Nama Pengguna');
         }
-        $rows = $query->orderBy("$table.id")->cursor()->map(fn ($row) => array_values((array) $row));
+        $rows = $query->orderBy("$table.id")->cursor()->map(function ($row) use ($page) {
+            if ($page === 'absensi') {
+                if ($row->perlu_penyesuaian) {
+                    foreach (['total_terlambat', 'total_pulang_cepat', 'total_izin', 'total_cuti', 'total_dinas'] as $field) {
+                        $row->$field = 'Perlu penyesuaian';
+                    }
+                }
+                $row->perlu_penyesuaian = $row->perlu_penyesuaian ? 'Perlu penyesuaian' : 'Sesuai';
+            }
+
+            return array_values((array) $row);
+        });
 
         return $excel->download($page.'.xlsx', $headings, $rows);
     }

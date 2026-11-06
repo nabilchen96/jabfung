@@ -36,6 +36,8 @@ class ExcelExportTest extends TestCase
     private function records(User $user, string $marker): void
     {
         foreach ([
+            'evaluasi_kinerjas' => ['nilai' => 'Baik', 'keterangan' => $marker],
+            'absensis' => ['bulan' => now()->format('Y-m'), 'total_kehadiran' => 20],
             'detail_users' => ['nip' => '001234567890123456', 'nama' => $marker],
             'jabatan_fungsionals' => ['jabatan_fungsional' => $marker, 'nomor_sk' => '001', 'terhitung_mulai_tanggal' => '2026-01-01'],
             'kepangkatans' => ['pangkat' => $marker],
@@ -52,14 +54,14 @@ class ExcelExportTest extends TestCase
         $user = User::factory()->create(['role' => 'Admin']);
         $this->records($user, 'Profile');
         $this->actingAs($user);
-        foreach (['dashboard', 'user', 'jabatan-fungsional', 'kepangkatan', 'angka-kredit', 'pendidikan', 'diklat', 'detail-user'] as $page) {
+        foreach (['evaluasi-kinerja', 'absensi', 'user', 'jabatan-fungsional', 'kepangkatan', 'angka-kredit', 'pendidikan', 'diklat', 'detail-user'] as $page) {
             $params = ['page' => $page];
             $url = '/'.$page;
             if ($page === 'detail-user') {
                 $params['id'] = $user->id;
                 $url .= '?id='.$user->id;
             }
-            $this->get($url)->assertOk()->assertSee(route('export.excel', $params), false)->assertSee('Export Excel');
+            $this->get($url)->assertOk()->assertSee(route('export.excel', $params), false)->assertSeeText('Export');
         }
     }
 

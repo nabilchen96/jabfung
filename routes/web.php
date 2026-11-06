@@ -32,6 +32,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/export-excel/{page}', \App\Http\Controllers\ExcelExportController::class)->name('export.excel');
 
 
+    Route::resource('absensi', \App\Http\Controllers\AbsensiController::class)
+        ->only(['index', 'store', 'update', 'destroy'])->parameters(['absensi' => 'absensi']);
+
+    Route::resource('evaluasi-kinerja', \App\Http\Controllers\EvaluasiKinerjaController::class)
+        ->only(['index', 'store', 'update', 'destroy'])->parameters(['evaluasi-kinerja' => 'evaluasiKinerja']);
+
     //DASHBOARD
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index');
 
