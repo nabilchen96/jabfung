@@ -28,9 +28,11 @@ class AbsensiTest extends TestCase
         return array_replace([
             'user_id' => $this->pegawai->id,
             'bulan' => '2026-11',
-            'total_terlambat' => 2,
-            'total_cuti_izin_dinas' => 3,
-            'total_pulang_cepat' => 1,
+            'total_terlambat' => '02:30:15',
+            'total_izin' => 1,
+            'total_cuti' => 2,
+            'total_dinas' => 3,
+            'total_pulang_cepat' => '01:15:00',
             'total_kehadiran' => 20,
         ], $overrides);
     }
@@ -42,9 +44,9 @@ class AbsensiTest extends TestCase
         $record = Absensi::firstOrFail();
         $this->assertDatabaseHas('absensis', $this->payload());
         $this->get('/absensi?bulan=2026-11')->assertOk()->assertSee('Pegawai Satu')->assertSee('data-id="'.$record->id.'"', false);
-        $this->put(route('absensi.update', $record), $this->payload(['total_terlambat' => 4]))
+        $this->put(route('absensi.update', $record), $this->payload(['total_terlambat' => '27:45:00']))
             ->assertSessionHasNoErrors()->assertRedirect();
-        $this->assertSame(4, $record->fresh()->total_terlambat);
+        $this->assertSame('27:45:00', $record->fresh()->total_terlambat);
         $this->delete(route('absensi.destroy', $record))->assertRedirect(route('absensi.index', ['bulan' => '2026-11']));
         $this->assertDatabaseMissing('absensis', ['id' => $record->id]);
     }
@@ -91,7 +93,14 @@ class AbsensiTest extends TestCase
         foreach ([
             ['bulan' => '2026-02', 'total_kehadiran' => 29],
             ['total_terlambat' => -1],
-            ['total_cuti_izin_dinas' => 1.5],
+            ['total_izin' => 1.5],
+            ['total_cuti' => -1],
+            ['total_dinas' => 32],
+            ['total_terlambat' => '01:60:00'],
+            ['total_pulang_cepat' => '01:00:60'],
+            ['total_terlambat' => '1:30:00'],
+            ['total_terlambat' => '1000:00:00'],
+            ['total_pulang_cepat' => '09:30'],
             ['total_pulang_cepat' => null],
             ['bulan' => '2026-13'],
             ['bulan' => ['2026-11']],
@@ -128,9 +137,58 @@ class AbsensiTest extends TestCase
         $xml = simplexml_load_string($sheet);
         $this->assertCount(2, $xml->sheetData->row);
         $this->assertStringContainsString('Pegawai Satu', $sheet);
+        $this->assertStringContainsString('02:30:15', $sheet);
+        $this->assertStringContainsString('Total Izin (Hari)', $sheet);
+        $this->assertStringContainsString('Total Cuti (Hari)', $sheet);
+        $this->assertStringContainsString('Total Dinas (Hari)', $sheet);
         $this->assertStringNotContainsString('2026-10', $sheet);
         $this->assertStringNotContainsString($this->admin->name, $sheet);
         $this->getJson('/export-excel/absensi')->assertUnprocessable();
+    }
+
+    public function test_duration_totals_preserve_seconds_and_support_more_than_twenty_four_hours(): void
+    {
+        $data = $this->payload([
+            'total_terlambat' => '125:30:45', 'total_pulang_cepat' => '00:00:00',
+            'total_izin' => 0, 'total_cuti' => 0, 'total_dinas' => 0,
+        ]);
+        $this->actingAs($this->admin)->post(route('absensi.store'), $data)->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('absensis', $data);
+        $this->get('/absensi?bulan=2026-11')->assertOk()->assertSee('125:30:45')->assertSee('00:00:00');
+    }
+
+    public function test_migration_preserves_legacy_values_and_requires_explicit_admin_adjustment(): void
+    {
+        // This test uses only its isolated in-memory database, never the development database.
+        $migration = require database_path('migrations/2026_11_06_000001_split_absensi_totals_and_add_durations.php');
+        $migration->down();
+        $id = DB::table('absensis')->insertGetId([
+            'user_id' => $this->pegawai->id, 'bulan' => '2026-11',
+            'total_terlambat' => 2, 'total_pulang_cepat' => 1,
+            'total_cuti_izin_dinas' => 3, 'total_kehadiran' => 20,
+        ]);
+        $zeroId = DB::table('absensis')->insertGetId([
+            'user_id' => $this->pegawai->id, 'bulan' => '2026-10',
+        ]);
+        $migration->up();
+        $this->assertDatabaseHas('absensis', [
+            'id' => $id, 'lama_terlambat_hari' => 2, 'lama_pulang_cepat_hari' => 1,
+            'lama_cuti_izin_dinas' => 3, 'total_kehadiran' => 20, 'perlu_penyesuaian' => true,
+        ]);
+        $this->assertFalse(Absensi::findOrFail($zeroId)->perlu_penyesuaian);
+        $this->actingAs($this->admin)->get('/absensi?bulan=2026-11')->assertOk()
+            ->assertSeeText('Perlu penyesuaian data lama')->assertSeeText('cuti/izin/dinas 3 hari');
+        $response = $this->get('/export-excel/absensi?bulan=2026-11')->assertOk();
+        $path = $response->baseResponse->getFile()->getPathname();
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open($path));
+        $sheet = $zip->getFromName('xl/worksheets/sheet1.xml');
+        $zip->close();
+        unlink($path);
+        $this->assertStringContainsString('Perlu penyesuaian', $sheet);
+        $this->put(route('absensi.update', $id), $this->payload())->assertSessionHasNoErrors();
+        $this->assertFalse(Absensi::findOrFail($id)->perlu_penyesuaian);
+        $this->assertDatabaseHas('absensis', ['id' => $id, 'lama_cuti_izin_dinas' => 3, 'total_izin' => 1, 'total_cuti' => 2, 'total_dinas' => 3]);
     }
 
     public function test_navigation_places_attendance_after_qualifications(): void

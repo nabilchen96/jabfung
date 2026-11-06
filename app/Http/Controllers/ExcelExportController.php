@@ -10,9 +10,10 @@ class ExcelExportController extends Controller
 {
     private const EXPORTS = [
         'absensi' => ['absensis', [
-            'bulan' => 'Bulan', 'total_terlambat' => 'Total Terlambat (Hari)',
-            'total_cuti_izin_dinas' => 'Total Cuti/Izin/Dinas (Hari)',
-            'total_pulang_cepat' => 'Total Pulang Cepat (Hari)', 'total_kehadiran' => 'Total Kehadiran (Hari)',
+            'bulan' => 'Bulan', 'total_terlambat' => 'Total Terlambat (HH:MM:SS)',
+            'total_izin' => 'Total Izin (Hari)', 'total_cuti' => 'Total Cuti (Hari)', 'total_dinas' => 'Total Dinas (Hari)',
+            'total_pulang_cepat' => 'Total Pulang Cepat (HH:MM:SS)', 'total_kehadiran' => 'Total Kehadiran (Hari)',
+            'perlu_penyesuaian' => 'Status Data',
         ]],
         'user' => ['users', ['name' => 'Nama', 'email' => 'Email', 'role' => 'Peran']],
         'detail-user' => ['detail_users', [
@@ -98,7 +99,18 @@ class ExcelExportController extends Controller
         if ($table !== 'users') {
             array_unshift($headings, 'Nama Pengguna');
         }
-        $rows = $query->orderBy("$table.id")->cursor()->map(fn ($row) => array_values((array) $row));
+        $rows = $query->orderBy("$table.id")->cursor()->map(function ($row) use ($page) {
+            if ($page === 'absensi') {
+                if ($row->perlu_penyesuaian) {
+                    foreach (['total_terlambat', 'total_pulang_cepat', 'total_izin', 'total_cuti', 'total_dinas'] as $field) {
+                        $row->$field = 'Perlu penyesuaian';
+                    }
+                }
+                $row->perlu_penyesuaian = $row->perlu_penyesuaian ? 'Perlu penyesuaian' : 'Sesuai';
+            }
+
+            return array_values((array) $row);
+        });
 
         return $excel->download($page.'.xlsx', $headings, $rows);
     }

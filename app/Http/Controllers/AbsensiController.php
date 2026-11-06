@@ -47,7 +47,9 @@ class AbsensiController extends Controller
     public function update(AbsensiRequest $request, Absensi $absensi)
     {
         $data = $request->validated();
-        $absensi->update($data);
+        $absensi->fill($data);
+        $absensi->perlu_penyesuaian = false;
+        $absensi->save();
 
         return redirect()->route('absensi.index', ['bulan' => $data['bulan']])->with('success', 'Data absensi berhasil diperbarui.');
     }
