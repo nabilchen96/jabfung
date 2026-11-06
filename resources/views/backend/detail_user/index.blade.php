@@ -8,6 +8,9 @@
         <div class="row" style="margin-top: -200px;">
             <div class="col-md-12 text-white">
                 <h3 class="font-weight-bold">Data Detail User</h3>
+                    <a href="{{ route('export.excel', ['page' => 'detail-user', 'id' => request('id')]) }}" class="btn btn-success btn-sm mt-2" title="Ekspor seluruh data yang dapat Anda akses">
+                        <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Export Excel
+                    </a>
             </div>
         </div>
 

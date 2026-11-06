@@ -10,6 +10,9 @@
 
             <div class="col-12 col-xl-8 mb-xl-0">
                 <h3 class="font-weight-bold">Data Angka Kredit</h3>
+                    <a href="{{ route('export.excel', ['page' => 'angka-kredit']) }}" class="btn btn-success btn-sm mt-2" title="Ekspor seluruh data yang dapat Anda akses">
+                        <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> Export Excel
+                    </a>
             </div>
 
         </div>
