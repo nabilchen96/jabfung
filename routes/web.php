@@ -29,6 +29,8 @@ Route::get('/logout', function () {
 //BACKEND
 Route::group(['middleware' => 'auth'], function () {
 
+    Route::get('/export-excel/{page}', \App\Http\Controllers\ExcelExportController::class)->name('export.excel');
+
 
     //DASHBOARD
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index');
